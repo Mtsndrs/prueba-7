@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Calendario UdeC 2025-2026</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h2 {
+      text-align: center;
+    }
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+      text-align: center;
+    }
+    .day {
+      border: 1px solid #ccc;
+      padding: 5px;
+      height: 100px;
+      position: relative;
+    }
+    .day:hover .tooltip {
+      display: block;
+    }
+    .tooltip {
+      display: none;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: #f9f9f9;
+      border: 1px solid #333;
+      font-size: 12px;
+      padding: 5px;
+      z-index: 10;
+    }
+    .controls {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .controls button {
+      padding: 5px 10px;
+      margin: 0 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="controls">
+    <button onclick="changeMonth(-1)">Anterior</button>
+    <span id="monthYear"></span>
+    <button onclick="changeMonth(1)">Siguiente</button>
+  </div>
+  <div class="calendar" id="calendar"></div>
+
+  <script>
+    const events = [{"Fecha":"2025-02-27T00:00:00.000","Evento":"DTI: Inicio del Proceso Centralizado de Control Acad\u00e9mico"},{"Fecha":"2025-02-28T00:00:00.000","Evento":"DTI: Inicio del Proceso Centralizado de Control Acad\u00e9mico"},{"Fecha":"2025-03-03T00:00:00.000","Evento":"Inicio inscripci\u00f3n v\u00eda web + Vinculaci\u00f3n + Nivelaci\u00f3n + Aulas Remediales"},{"Fecha":"2025-03-07T00:00:00.000","Evento":"Fin inscripci\u00f3n asignaturas + Fin semana de vinculaci\u00f3n"},{"Fecha":"2025-03-10T00:00:00.000","Evento":"Inicio de clases todos los cursos"},{"Fecha":"2025-03-12T00:00:00.000","Evento":"Vence plazo Reincorporaci\u00f3n o Continuaci\u00f3n de Estudios"},{"Fecha":"2025-04-04T00:00:00.000","Evento":"Fin modificaciones SAC + Reincorporaciones + Titulaciones + Oferta y Demanda + Cierre inscripci\u00f3n"},{"Fecha":"2025-04-07T00:00:00.000","Evento":"DTI: Depuraci\u00f3n de la Base de Datos"},{"Fecha":"2025-04-08T00:00:00.000","Evento":"DTI: Depuraci\u00f3n de la Base de Datos"},{"Fecha":"2025-04-21T00:00:00.000","Evento":"Inicio Oferta y Demanda Asignaturas 2\u00ba Sem."},{"Fecha":"2025-05-12T00:00:00.000","Evento":"Inicio Pausa Activa Aniversario UdeC"},{"Fecha":"2025-05-14T00:00:00.000","Evento":"Aniversario de la Universidad"},{"Fecha":"2025-05-16T00:00:00.000","Evento":"Fin Pausa Activa + D\u00eda del Trabajador UdeC (tarde libre)"},{"Fecha":"2025-05-19T00:00:00.000","Evento":"No evaluaciones (cert\u00e1menes, maquetas, proyectos)"},{"Fecha":"2025-05-20T00:00:00.000","Evento":"No evaluaciones (cert\u00e1menes, maquetas, proyectos)"},{"Fecha":"2025-06-20T00:00:00.000","Evento":"Fin plazo solicitud suspensi\u00f3n estudios"},{"Fecha":"2025-06-23T00:00:00.000","Evento":"Inicio emisi\u00f3n Actas de Notas"},{"Fecha":"2025-06-27T00:00:00.000","Evento":"Fin plazo registrar suspensi\u00f3n de estudios"},{"Fecha":"2025-07-04T00:00:00.000","Evento":"T\u00e9rmino clases asignaturas semestrales"},{"Fecha":"2025-07-07T00:00:00.000","Evento":"Inicio vacaciones universitarias"},{"Fecha":"2025-07-13T00:00:00.000","Evento":"Fin vacaciones universitarias"},{"Fecha":"2025-07-14T00:00:00.000","Evento":"Inicio evaluaciones de recuperaci\u00f3n"},{"Fecha":"2025-07-25T00:00:00.000","Evento":"Fin evaluaciones + t\u00e9rmino clases anuales"},{"Fecha":"2025-07-28T00:00:00.000","Evento":"Inicio jornadas perfeccionamiento docente"},{"Fecha":"2025-07-29T00:00:00.000","Evento":"Fin registrar notas semestrales + Fin oferta\/demanda 2\u00b0 sem"},{"Fecha":"2025-07-30T00:00:00.000","Evento":"DTI: Control Acad\u00e9mico"},{"Fecha":"2025-07-31T00:00:00.000","Evento":"DTI: Control Acad\u00e9mico"},{"Fecha":"2025-08-01T00:00:00.000","Evento":"Fin jornadas perfeccionamiento docente"},{"Fecha":"2025-08-04T00:00:00.000","Evento":"Inicio inscripci\u00f3n v\u00eda web + ajuste oferta\/demanda 2\u00ba Sem."},{"Fecha":"2025-08-05T00:00:00.000","Evento":"Vence plazo reincorporaci\u00f3n o continuaci\u00f3n de estudios"},{"Fecha":"2025-08-08T00:00:00.000","Evento":"Fin inscripci\u00f3n asignaturas 2\u00ba Sem."},{"Fecha":"2025-08-11T00:00:00.000","Evento":"Inicio de clases 2\u00ba Sem."},{"Fecha":"2025-08-15T00:00:00.000","Evento":"Feriado: Asunci\u00f3n de la Virgen"},{"Fecha":"2025-09-05T00:00:00.000","Evento":"Fin modificaciones SAC + Reincorporaciones + Titulaciones + Cierre inscripci\u00f3n"},{"Fecha":"2025-09-08T00:00:00.000","Evento":"DTI: Depuraci\u00f3n base de datos"},{"Fecha":"2025-09-09T00:00:00.000","Evento":"DTI: Depuraci\u00f3n base de datos"},{"Fecha":"2025-09-15T00:00:00.000","Evento":"Receso por Fiestas Patrias"},{"Fecha":"2025-09-17T00:00:00.000","Evento":"Receso por Fiestas Patrias"},{"Fecha":"2025-09-18T00:00:00.000","Evento":"Feriado: Fiestas Patrias"},{"Fecha":"2025-09-19T00:00:00.000","Evento":"Feriado: Glorias del Ej\u00e9rcito"},{"Fecha":"2025-09-22T00:00:00.000","Evento":"No evaluaciones + Inicio oferta\/demanda 1er sem pr\u00f3ximo a\u00f1o"},{"Fecha":"2025-09-23T00:00:00.000","Evento":"No evaluaciones"},{"Fecha":"2025-10-12T00:00:00.000","Evento":"Feriado: Descubrimiento de Dos Mundos"},{"Fecha":"2025-10-31T00:00:00.000","Evento":"Feriado: D\u00eda Iglesias Evang\u00e9licas y Protestantes"},{"Fecha":"2025-11-01T00:00:00.000","Evento":"Feriado: D\u00eda de Todos los Santos"},{"Fecha":"2025-11-24T00:00:00.000","Evento":"Inicio emisi\u00f3n Actas de Notas"},{"Fecha":"2025-11-28T00:00:00.000","Evento":"Fin solicitud Suspensi\u00f3n de Estudios"},{"Fecha":"2025-12-03T00:00:00.000","Evento":"Fin registrar Suspensiones 2\u00b0 Sem."},{"Fecha":"2025-12-08T00:00:00.000","Evento":"Feriado: Inmaculada Concepci\u00f3n"},{"Fecha":"2025-12-12T00:00:00.000","Evento":"T\u00e9rmino clases todos los cursos"},{"Fecha":"2025-12-15T00:00:00.000","Evento":"Inicio Evaluaciones de Recuperaci\u00f3n"},{"Fecha":"2025-12-24T00:00:00.000","Evento":"Fin Evaluaciones de Recuperaci\u00f3n"},{"Fecha":"2025-12-25T00:00:00.000","Evento":"Feriado: Navidad"},{"Fecha":"2025-12-26T00:00:00.000","Evento":"Inicio Receso Universitario Fin de A\u00f1o"},{"Fecha":"2026-01-04T00:00:00.000","Evento":"Fin Receso Universitario Fin de A\u00f1o"},{"Fecha":"2026-01-05T00:00:00.000","Evento":"Inicio PLEV Asignaturas Anuales y Semestrales"},{"Fecha":"2026-01-07T00:00:00.000","Evento":"Fin registrar Notas Finales + Fin oferta\/demanda 1er sem."},{"Fecha":"2026-01-08T00:00:00.000","Evento":"DTI: Inicio Control Acad\u00e9mico Anticipado 2026"},{"Fecha":"2026-01-09T00:00:00.000","Evento":"DTI: Fin Control Acad\u00e9mico Anticipado 2026"},{"Fecha":"2026-01-12T00:00:00.000","Evento":"Inicio inscripci\u00f3n anticipada v\u00eda web + ajustes oferta\/demanda"},{"Fecha":"2026-01-16T00:00:00.000","Evento":"Fin inscripci\u00f3n anticipada v\u00eda web"},{"Fecha":"2026-01-21T00:00:00.000","Evento":"Fin inscripci\u00f3n anticipada v\u00eda web para jefaturas"},{"Fecha":"2026-01-23T00:00:00.000","Evento":"Fin plazo solicitudes especiales de admisi\u00f3n"},{"Fecha":"2026-01-30T00:00:00.000","Evento":"Fin PLEV y registro de notas finales"},{"Fecha":"2026-02-02T00:00:00.000","Evento":"Inicio vacaciones de verano 2026"},{"Fecha":"2026-02-26T00:00:00.000","Evento":"DTI: Inicio Control Acad\u00e9mico"},{"Fecha":"2026-02-27T00:00:00.000","Evento":"DTI: Fin Control Acad\u00e9mico"},{"Fecha":"2026-03-01T00:00:00.000","Evento":"Fin vacaciones de verano"},{"Fecha":"2026-03-02T00:00:00.000","Evento":"Inicio inscripci\u00f3n v\u00eda web + Vinculaci\u00f3n + Nivelaci\u00f3n"},{"Fecha":"2026-03-06T00:00:00.000","Evento":"Fin inscripci\u00f3n asignaturas + Fin semana de vinculaci\u00f3n"},{"Fecha":"2026-03-09T00:00:00.000","Evento":"Inicio de clases todos los cursos"}];
+    let currentMonth = new Date().getMonth();
+    let currentYear = new Date().getFullYear();
+
+    function renderCalendar(month, year) {
+      const calendar = document.getElementById("calendar");
+      calendar.innerHTML = "";
+
+      const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+      document.getElementById("monthYear").innerText = monthNames[month] + " " + year;
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      for (let i = 0; i < firstDay; i++) {
+        calendar.innerHTML += "<div></div>";
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const fullDate = new Date(year, month, day).toISOString().split("T")[0];
+        const dayEvents = events.filter(e => e.Fecha.startsWith(fullDate));
+        let content = `<div class='day'>${day}`;
+        if (dayEvents.length > 0) {
+          content += `<div class='tooltip'>` + dayEvents.map(e => e.Evento).join("<br>") + `</div>`;
+        }
+        content += "</div>";
+        calendar.innerHTML += content;
+      }
+    }
+
+    function changeMonth(step) {
+      currentMonth += step;
+      if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+      } else if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+      }
+      renderCalendar(currentMonth, currentYear);
+    }
+
+    renderCalendar(currentMonth, currentYear);
+  </script>
+</body>
+</html>
