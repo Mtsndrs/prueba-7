@@ -48,7 +48,7 @@
       border-collapse: collapse;
     }
     th, td {
-      width: 20%;
+      width: 14.28%;
       height: 90px;
       border: 1px solid #ddd;
       vertical-align: top;
@@ -81,7 +81,7 @@
     <table>
       <thead>
         <tr>
-          <th>Lun</th><th>Mar</th><th>Mié</th><th>Jue</th><th>Vie</th>
+          <th>Lun</th><th>Mar</th><th>Mié</th><th>Jue</th><th>Vie</th><th>Sáb</th><th>Dom</th>
         </tr>
       </thead>
       <tbody id="calendarBody"></tbody>
@@ -180,10 +180,10 @@
 
       while (date <= totalDays) {
         const row = document.createElement("tr");
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 7; i++) {
           const cell = document.createElement("td");
           const d = new Date(year, month, date);
-          if (d.getMonth() === month && d.getDay() !== 0 && d.getDay() !== 6) {
+          if (d.getMonth() === month) {
             cell.innerHTML = `<strong>${d.getDate()}</strong>`;
             const key = d.toISOString().split("T")[0];
             if (events[key]) {
@@ -226,3 +226,4 @@
   </script>
 </body>
 </html>
+
