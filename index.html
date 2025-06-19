@@ -2,210 +2,167 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Calendario UdeC</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calendario UdeC 2025-2026</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f8f9fa;
-      margin: 0;
-      padding: 20px;
+      margin: 20px;
+      background: #f2f2f2;
+    }
+    h1 {
+      text-align: center;
+      color: #003865;
     }
     .calendar {
-      max-width: 900px;
+      max-width: 800px;
       margin: auto;
-      background: #ffffff;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
-      border-radius: 8px;
-      overflow: hidden;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
-    .calendar-header {
-      background: #00457C;
-      color: white;
-      padding: 15px;
+    .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-    .calendar-header button {
-      background: white;
-      color: #00457C;
+    .header button {
+      background-color: #003865;
+      color: white;
       border: none;
-      padding: 6px 12px;
-      font-weight: bold;
-      cursor: pointer;
+      padding: 8px 16px;
       border-radius: 5px;
+      cursor: pointer;
     }
-    .calendar-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      width: 14.28%;
       padding: 10px;
-    }
-    .day-name {
-      font-weight: bold;
       text-align: center;
-      color: #00457C;
+      border: 1px solid #ddd;
+      vertical-align: top;
     }
-    .day {
-      border: 1px solid #e1e1e1;
-      min-height: 80px;
-      padding: 5px;
-      font-size: 13px;
-      position: relative;
-    }
-    .day .date {
-      font-weight: bold;
-      margin-bottom: 3px;
+    th {
+      background-color: #e0e0e0;
     }
     .event {
-      background: #ffeb3b;
-      font-size: 11px;
-      padding: 2px 4px;
+      background-color: #ffe9a7;
+      padding: 4px;
+      margin-top: 5px;
       border-radius: 4px;
-      margin-top: 2px;
+      font-size: 12px;
+      color: #444;
+    }
+    .hidden {
+      display: none;
     }
   </style>
 </head>
 <body>
   <div class="calendar">
-    <div class="calendar-header">
-      <button onclick="prevMonth()">◀ Anterior</button>
+    <div class="header">
+      <button onclick="prevMonth()">← Anterior</button>
       <h2 id="monthYear"></h2>
-      <button onclick="nextMonth()">Siguiente ▶</button>
+      <button onclick="nextMonth()">Siguiente →</button>
     </div>
-    <div class="calendar-grid" id="calendarGrid"></div>
+    <table id="calendarTable">
+      <thead>
+        <tr>
+          <th>Lun</th>
+          <th>Mar</th>
+          <th>Mié</th>
+          <th>Jue</th>
+          <th>Vie</th>
+        </tr>
+      </thead>
+      <tbody id="calendarBody"></tbody>
+    </table>
   </div>
 
   <script>
-    const eventos = {
-      "2025-02-27": ["DTI: Inicio del Control Académico"],
-      "2025-02-28": ["DTI: Inicio del Control Académico"],
-      "2025-03-03": ["Inicio inscripción vía web + Vinculación + Nivelación + Aulas Remediales"],
-      "2025-03-07": ["Fin inscripción asignaturas + Fin semana de vinculación"],
-      "2025-03-10": ["Inicio de clases todos los cursos"],
-      "2025-03-12": ["Vence plazo Reincorporación o Continuación de Estudios"],
-      "2025-04-04": ["Fin modificaciones SAC + Reincorporaciones + Titulaciones + Oferta y Demanda + Cierre inscripción"],
-      "2025-04-07": ["DTI: Depuración de la Base de Datos"],
-      "2025-04-08": ["DTI: Depuración de la Base de Datos"],
-      "2025-04-21": ["Inicio Oferta y Demanda Asignaturas 2º Sem."],
-      "2025-05-12": ["Inicio Pausa Activa Aniversario UdeC"],
-      "2025-05-14": ["Aniversario de la Universidad"],
-      "2025-05-16": ["Fin Pausa Activa + Día del Trabajador UdeC (tarde libre)"],
-      "2025-05-19": ["No evaluaciones (certámenes, maquetas, proyectos)"],
-      "2025-05-20": ["No evaluaciones (certámenes, maquetas, proyectos)"],
-      "2025-06-20": ["Fin plazo solicitud suspensión estudios"],
-      "2025-06-23": ["Inicio emisión Actas de Notas"],
-      "2025-06-27": ["Fin plazo registrar suspensión de estudios"],
-      "2025-07-04": ["Término clases asignaturas semestrales"],
-      "2025-07-07": ["Inicio vacaciones universitarias"],
-      "2025-07-13": ["Fin vacaciones universitarias"],
-      "2025-07-14": ["Inicio evaluaciones de recuperación"],
-      "2025-07-25": ["Fin evaluaciones + término clases anuales"],
-      "2025-07-28": ["Inicio jornadas perfeccionamiento docente"],
-      "2025-07-29": ["Fin registrar notas semestrales + Fin oferta/demanda 2° sem"],
-      "2025-07-30": ["DTI: Control Académico"],
-      "2025-07-31": ["DTI: Control Académico"],
-      "2025-08-01": ["Fin jornadas perfeccionamiento docente"],
-      "2025-08-04": ["Inicio inscripción vía web + ajuste oferta/demanda 2º Sem."],
-      "2025-08-05": ["Vence plazo reincorporación o continuación de estudios"],
-      "2025-08-08": ["Fin inscripción asignaturas 2º Sem."],
-      "2025-08-11": ["Inicio de clases 2º Sem."],
-      "2025-08-15": ["Feriado: Asunción de la Virgen"],
-      "2025-09-05": ["Fin modificaciones SAC + Reincorporaciones + Titulaciones + Cierre inscripción"],
-      "2025-09-08": ["DTI: Depuración base de datos"],
-      "2025-09-09": ["DTI: Depuración base de datos"],
-      "2025-09-15": ["Receso por Fiestas Patrias"],
-      "2025-09-17": ["Receso por Fiestas Patrias"],
-      "2025-09-18": ["Feriado: Fiestas Patrias"],
-      "2025-09-19": ["Feriado: Glorias del Ejército"],
-      "2025-09-22": ["No evaluaciones + Inicio oferta/demanda 1er sem próximo año"],
-      "2025-09-23": ["No evaluaciones"],
-      "2025-10-12": ["Feriado: Descubrimiento de Dos Mundos"],
-      "2025-10-31": ["Feriado: Día Iglesias Evangélicas y Protestantes"],
-      "2025-11-01": ["Feriado: Día de Todos los Santos"],
-      "2025-11-24": ["Inicio emisión Actas de Notas"],
-      "2025-11-28": ["Fin solicitud Suspensión de Estudios"],
-      "2025-12-03": ["Fin registrar Suspensiones 2° Sem."],
-      "2025-12-08": ["Feriado: Inmaculada Concepción"],
-      "2025-12-12": ["Término clases todos los cursos"],
-      "2025-12-15": ["Inicio Evaluaciones de Recuperación"],
-      "2025-12-24": ["Fin Evaluaciones de Recuperación"],
-      "2025-12-25": ["Feriado: Navidad"],
-      "2025-12-26": ["Inicio Receso Universitario Fin de Año"],
-      "2026-01-04": ["Fin Receso Universitario Fin de Año"],
-      "2026-01-05": ["Inicio PLEV Asignaturas Anuales y Semestrales"],
-      "2026-01-07": ["Fin registrar Notas Finales + Fin oferta/demanda 1er sem."],
-      "2026-01-08": ["DTI: Inicio Control Académico Anticipado 2026"],
-      "2026-01-09": ["DTI: Fin Control Académico Anticipado 2026"],
-      "2026-01-12": ["Inicio inscripción anticipada vía web + ajustes oferta/demanda"],
-      "2026-01-16": ["Fin inscripción anticipada vía web"],
-      "2026-01-21": ["Fin inscripción anticipada vía web para jefaturas"],
-      "2026-01-23": ["Fin plazo solicitudes especiales de admisión"],
-      "2026-01-30": ["Fin PLEV y registro de notas finales"],
-      "2026-02-02": ["Inicio vacaciones de verano 2026"],
-      "2026-02-26": ["DTI: Inicio Control Académico"],
-      "2026-02-27": ["DTI: Fin Control Académico"],
-      "2026-03-01": ["Fin vacaciones de verano"],
-      "2026-03-02": ["Inicio inscripción vía web + Vinculación + Nivelación"],
-      "2026-03-06": ["Fin inscripción asignaturas + Fin semana de vinculación"],
-      "2026-03-09": ["Inicio de clases todos los cursos"]
+    const events = {
+      "2025-03-03": ["Inicio inscripción vía web", "Vinculación", "Nivelación"],
+      "2025-03-07": ["Fin inscripción", "Fin semana vinculación"],
+      "2025-03-10": ["Inicio clases"],
+      "2025-03-12": ["Vence plazo Reincorporación"],
+      "2025-04-04": ["Fin modificaciones SAC", "Cierre inscripción"],
+      "2025-05-12": ["Inicio Pausa Activa"],
+      "2025-05-14": ["Aniversario UdeC"],
+      "2025-05-16": ["Fin Pausa Activa", "Día Trabajador UdeC"],
+      "2025-07-04": ["Fin clases semestrales"],
+      "2025-07-07": ["Inicio vacaciones"],
+      "2025-08-11": ["Inicio clases 2º Sem."],
+      "2025-12-12": ["Término clases"],
+      "2026-01-05": ["Inicio PLEV"],
+      "2026-02-02": ["Inicio vacaciones verano"],
+      "2026-03-02": ["Inicio inscripción", "Nivelación"],
+      "2026-03-09": ["Inicio clases"]
     };
 
-    const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-    const diasSemana = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
-    let currentDate = new Date();
+    let currentMonth = new Date().getMonth();
+    let currentYear = new Date().getFullYear();
 
-    function renderCalendar() {
-      const year = currentDate.getFullYear();
-      const month = currentDate.getMonth();
-      document.getElementById('monthYear').textContent = `${meses[month]} ${year}`;
+    function generateCalendar(month, year) {
+      const calendarBody = document.getElementById("calendarBody");
+      calendarBody.innerHTML = "";
+
+      const monthYear = document.getElementById("monthYear");
+      const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio",
+        "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+      monthYear.textContent = `${monthNames[month]} ${year}`;
+
       const firstDay = new Date(year, month, 1);
       const lastDay = new Date(year, month + 1, 0);
-      const grid = document.getElementById('calendarGrid');
-      grid.innerHTML = '';
+      let date = 1 - ((firstDay.getDay() + 6) % 7);
 
-      diasSemana.forEach(d => {
-        const div = document.createElement('div');
-        div.className = 'day-name';
-        div.textContent = d;
-        grid.appendChild(div);
-      });
-
-      const offset = (firstDay.getDay() + 6) % 7;
-      for (let i = 0; i < offset; i++) {
-        grid.appendChild(document.createElement('div'));
-      }
-
-      for (let day = 1; day <= lastDay.getDate(); day++) {
-        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-        const div = document.createElement('div');
-        div.className = 'day';
-        const dateSpan = document.createElement('div');
-        dateSpan.className = 'date';
-        dateSpan.textContent = day;
-        div.appendChild(dateSpan);
-        if (eventos[dateStr]) {
-          eventos[dateStr].forEach(ev => {
-            const evDiv = document.createElement('div');
-            evDiv.className = 'event';
-            evDiv.textContent = ev;
-            div.appendChild(evDiv);
-          });
+      while (date <= lastDay.getDate()) {
+        const row = document.createElement("tr");
+        for (let i = 1; i <= 5; i++) {
+          const cell = document.createElement("td");
+          const cellDate = new Date(year, month, date);
+          if (cellDate.getMonth() === month && cellDate.getDay() !== 0 && cellDate.getDay() !== 6) {
+            cell.innerHTML = `<strong>${cellDate.getDate()}</strong>`;
+            const dateKey = cellDate.toISOString().slice(0, 10);
+            if (events[dateKey]) {
+              events[dateKey].forEach(evt => {
+                const div = document.createElement("div");
+                div.className = "event";
+                div.textContent = evt;
+                cell.appendChild(div);
+              });
+            }
+          }
+          row.appendChild(cell);
+          date++;
         }
-        grid.appendChild(div);
+        calendarBody.appendChild(row);
       }
-    }
-
-    function prevMonth() {
-      currentDate.setMonth(currentDate.getMonth() - 1);
-      renderCalendar();
     }
 
     function nextMonth() {
-      currentDate.setMonth(currentDate.getMonth() + 1);
-      renderCalendar();
+      currentMonth++;
+      if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+      }
+      generateCalendar(currentMonth, currentYear);
     }
 
-    renderCalendar();
+    function prevMonth() {
+      currentMonth--;
+      if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+      }
+      generateCalendar(currentMonth, currentYear);
+    }
+
+    generateCalendar(currentMonth, currentYear);
   </script>
 </body>
 </html>
