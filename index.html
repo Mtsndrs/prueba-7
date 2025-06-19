@@ -86,9 +86,27 @@
     </thead>
     <tbody id="calendarBody"></tbody>
   </table>
-  <div style="background: #003865; padding: 10px; text-align: center;">
-    <button onclick="prevMonth()" style="background: white; color: #003865; border: none; padding: 8px 14px; border-radius: 5px; margin: 0 10px; cursor: pointer; font-weight: bold;">←</button>
-    <button onclick="nextMonth()" style="background: white; color: #003865; border: none; padding: 8px 14px; border-radius: 5px; margin: 0 10px; cursor: pointer; font-weight: bold;">→</button>
+  <div style="background: #003865; padding: 12px; text-align: center;">
+    <style>
+      .nav-btn {
+        background: white;
+        color: #ffd200;
+        border: 2px solid #ffd200;
+        padding: 12px 20px;
+        font-size: 20px;
+        font-weight: bold;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s, color 0.3s;
+        margin: 0 10px;
+      }
+      .nav-btn:hover {
+        background: #ffd200;
+        color: #003865;
+      }
+    </style>
+    <button class="nav-btn" onclick="prevMonth()">←</button>
+    <button class="nav-btn" onclick="nextMonth()">→</button>
   </div>
 </div>
   
