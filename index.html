@@ -76,15 +76,13 @@
 <body>
 <div class="calendar">
   <div class="header">
-    <!-- LOGO SVG incrustado -->
     <div style="display: flex; align-items: center; gap: 10px;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="160" viewBox="0 0 784 176" fill="none">
-        <path d="M25.9,0.6H0v144.5c0,14.1,11.5,25.6,25.6,25.6h143.1V144H25.9V0.6z" fill="#003865"/>
-        <path d="M63.3,72.5H96v33.3H63.3V72.5z" fill="#FFD100"/>
-        <path d="M120.3,104.3h32.8v34.3h-32.8V104.3z" fill="#FFD100"/>
-        <text x="200" y="110" font-family="Arial, sans-serif" font-size="32" fill="#003865">Dirección de Docencia</text>
+      <svg xmlns="http://www.w3.org/2000/svg" width="160" viewBox="0 0 784 176" fill="white">
+        <path d="M25.9,0.6H0v144.5c0,14.1,11.5,25.6,25.6,25.6h143.1V144H25.9V0.6z" fill="white"/>
+        <path d="M63.3,72.5H96v33.3H63.3V72.5z" fill="white"/>
+        <path d="M120.3,104.3h32.8v34.3h-32.8V104.3z" fill="white"/>
+        <text x="200" y="110" font-family="Arial, sans-serif" font-size="32" fill="white">Dirección de Docencia</text>
       </svg>
-
       <h2 id="monthYear" style="margin: 0; color: white;"></h2>
     </div>
     <div>
@@ -95,7 +93,7 @@
   <table>
     <thead>
       <tr>
-        <th>Lun</th><th>Mar</th><th>Mié</th><th>Jue</th><th>Vie</th>
+        <th>Lun</th><th>Mar</th><th>Mié</th><th>Jue</th><th>Vie</th><th>Sáb</th><th>Dom</th>
       </tr>
     </thead>
     <tbody id="calendarBody"></tbody>
@@ -194,7 +192,7 @@
 
       while (date <= totalDays) {
         const row = document.createElement("tr");
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 7; i++) {
           const cell = document.createElement("td");
           const d = new Date(year, month, date);
           if (d.getMonth() === month) {
