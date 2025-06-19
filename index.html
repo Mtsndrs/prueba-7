@@ -77,10 +77,6 @@
 <div class="calendar">
   <div class="header">
     <h2 id="monthYear" style="margin: 0; color: white;">Calendario UdeC</h2>
-    <div>
-      <button onclick="prevMonth()">←</button>
-      <button onclick="nextMonth()">→</button>
-    </div>
   </div>
   <table>
     <thead>
@@ -90,6 +86,10 @@
     </thead>
     <tbody id="calendarBody"></tbody>
   </table>
+  <div style="text-align: center; padding: 10px;">
+    <button onclick="prevMonth()">← Mes anterior</button>
+    <button onclick="nextMonth()">Mes siguiente →</button>
+  </div>
 </div>
   
   <script>
