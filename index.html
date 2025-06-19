@@ -87,7 +87,7 @@
     <tbody id="calendarBody"></tbody>
   </table>
 
- <div style="background: #003865; padding: 12px; text-align: center;">
+<div style="background: #003865; padding: 12px; text-align: center;">
   <style>
     .nav-btn {
       background: #ffd200;
@@ -107,8 +107,8 @@
     }
 
     .nav-btn svg {
-      width: 40px;  /* ← tamaño de la flecha */
-      height: 40px;
+      width: 42px;
+      height: 42px;
       fill: white;
       transition: fill 0.3s;
     }
@@ -119,17 +119,19 @@
   </style>
 
   <button class="nav-btn" onclick="prevMonth()">
+    <!-- Flecha doble izquierda («) -->
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-      <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/>
+      <path d="M11.41 7.41 10 6l-6 6 6 6 1.41-1.41L7.83 12l3.58-4.59zM18.41 7.41 17 6l-6 6 6 6 1.41-1.41L14.83 12l3.58-4.59z"/>
     </svg>
   </button>
 
   <button class="nav-btn" onclick="nextMonth()">
+    <!-- Flecha doble derecha (») -->
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-      <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/>
+      <path d="M12.59 16.59 14 18l6-6-6-6-1.41 1.41L16.17 12l-3.58 4.59zM5.59 16.59 7 18l6-6-6-6-1.41 1.41L9.17 12l-3.58 4.59z"/>
     </svg>
   </button>
- </div>
+</div>
 </div>
   
   <script>
