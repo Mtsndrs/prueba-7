@@ -116,6 +116,12 @@
     .nav-btn:hover svg {
       fill: #003865;
     }
+    .today {
+  background: #ffd200 !important; /* Amarillo UdeC */
+  font-weight: bold;
+  border: 2px solid #003865;
+}
+
   </style>
 
   <button class="nav-btn" onclick="prevMonth()">
@@ -230,7 +236,9 @@
           const cell = document.createElement("td");
           const d = new Date(year, month, date);
           if (d.getMonth() === month) {
-            cell.innerHTML = `<strong>${d.getDate()}</strong>`;
+  const isToday = d.toDateString() === new Date().toDateString();
+  if (isToday) cell.classList.add("today");
+  cell.innerHTML = `<strong>${d.getDate()}</strong>`;
             const key = d.toISOString().split("T")[0];
             if (events[key]) {
               events[key].forEach(e => {
